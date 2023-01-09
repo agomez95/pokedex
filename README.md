@@ -17,6 +17,10 @@ npm i -g @nestjs/cli
 ```
 docker-compose up -d
 ```
+5. Instalar la version menor de Axios
+```
+npm i axios@0.27.2
+```
 
 
 ## Stack usado
