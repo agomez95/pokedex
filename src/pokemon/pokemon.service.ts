@@ -15,10 +15,6 @@ export class PokemonService {
   ) {}
 
   async create(createPokemonDto: CreatePokemonDto) {
-    /**
-     * InteralServerErrorException - Cuando un registro mandado es duplicado el servidor arroja un internal error
-     * BadRequestException - Capturamos el codigo de error y si es el correcto mandamos un error 404 como respuesta al cliente
-     */
     try {
 
       createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
@@ -70,12 +66,18 @@ export class PokemonService {
   }
 
   async remove(id: string) {
-    const pokemon = await this.findOne(id);
-    await pokemon.deleteOne();
-    //return `This action removes a #${id} pokemon`;
+    const { deletedCount } = await this.pokemonModel.deleteOne({_id: id});
+
+    if(deletedCount === 0) throw new BadRequestException(`Pokemon with id '${id}' doesn't exists`);
+
+    return `Pokemon with id '${id}' was removed`;
   }
 
   private handleException(error: any, func: string) {
+    /**
+     * InteralServerErrorException - Cuando un registro mandado es duplicado el servidor arroja un internal error
+     * BadRequestException - Capturamos el codigo de error y si es el correcto mandamos un error 404 como respuesta al cliente
+    */
     if(error.code === 11000) {
       switch(func) {
         case 'create':
