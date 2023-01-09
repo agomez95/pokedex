@@ -1,15 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Pokemon } from './entities/pokemon.entity';
+
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 
 @Injectable()
 export class PokemonService {
-  create(createPokemonDto: CreatePokemonDto) {
-    return 'This action adds a new pokemon';
+
+  constructor(
+    @InjectModel(Pokemon.name) //con esto hace que nest permita la injeccion de modelos en este servicio
+    private readonly pokemonModel: Model<Pokemon> //La entidad
+  ) {}
+
+  async create(createPokemonDto: CreatePokemonDto) {
+    /**
+     * InteralServerErrorException - Cuando un registro mandado es duplicado el servidor arroja un internal error
+     * BadRequestException - Capturamos el codigo de error y si es el correcto mandamos un error 404 como respuesta al cliente
+     */
+    try {
+      createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
+      const pokemon = await this.pokemonModel.create(createPokemonDto);
+      // return `Added new pokemon ${pokemon.no}`;
+      return pokemon;
+    } catch(error) {
+      if(error.code === 11000) throw new BadRequestException(`Pokemon exists in db ${JSON.stringify(error.keyValue)}`);
+      console.log(error);
+      throw new InternalServerErrorException(`Can't create pokemon - check server logs`);
+    }
   }
 
-  findAll() {
-    return `This action returns all pokemon`;
+  findAll(): Promise<Pokemon[]> {
+    return this.pokemonModel.find().exec();
   }
 
   findOne(id: number) {

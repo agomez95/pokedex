@@ -9,8 +9,7 @@ export class PokemonController {
 
   @Post()
   create(@Body() createPokemonDto: CreatePokemonDto) {
-    //return this.pokemonService.create(createPokemonDto);
-    return createPokemonDto;
+    return this.pokemonService.create(createPokemonDto);
   }
 
   @Get()
