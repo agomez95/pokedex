@@ -5,6 +5,7 @@ import { Pokemon } from './entities/pokemon.entity';
 
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class PokemonService {
@@ -27,8 +28,17 @@ export class PokemonService {
     }
   }
 
-  findAll(): Promise<Pokemon[]> {
-    return this.pokemonModel.find().exec();
+  findAll(paginationDto: PaginationDto) {
+
+    const { limit, offset } = paginationDto; /// 10 registros por default para no llamar los 650
+
+    return this.pokemonModel.find()
+      .limit(limit) // cant
+      .skip(offset) // desde
+      .sort({
+        no: 1 // descentente
+      })
+      .select('-__v'); // excluir el __V
   }
 
   async findOne(term: string) {

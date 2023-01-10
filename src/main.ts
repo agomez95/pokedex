@@ -9,7 +9,13 @@ async function main() {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
-    forbidNonWhitelisted: true
+    forbidNonWhitelisted: true,
+    /// los siguientes transformadores consumen memoria extra por lo que es opcional, 
+    /// tendria que transformar todos los parametros que ingresan desde el controler o service
+    transform: true,
+    transformOptions: {
+      enableImplicitConversion: true
+    }
   }));
 
   await app.listen(3000);
