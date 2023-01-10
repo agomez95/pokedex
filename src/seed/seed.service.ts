@@ -1,17 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Pokemon } from 'src/pokemon/entities/pokemon.entity';
 
-import axios, { AxiosInstance } from 'axios';
-import { PokemonService } from 'src/pokemon/pokemon.service';
+import { Pokemon } from 'src/pokemon/entities/pokemon.entity';
 import { PokeResponse } from './interfaces/poke-response.interface';
+import { AxiosAdapter } from 'src/common/adapters/axios.adapter';
+//import { PokemonService } from 'src/pokemon/pokemon.service';
 
 @Injectable()
 export class SeedService {
-
-  // Esta dependencia es para generar peticiones http momentaneo para que sea visible las peticiones
-  private readonly axios: AxiosInstance = axios;
 
   constructor( 
     /// constructor para seed de pokemon PROPIO
@@ -20,7 +17,8 @@ export class SeedService {
     // Inyeccion del model pokemon en el seed
     // Segun el video
     @InjectModel(Pokemon.name)
-    private readonly pokemonModel: Model<Pokemon>
+    private readonly pokemonModel: Model<Pokemon>,
+    private readonly http: AxiosAdapter //con este custom provider tambien puedo hacer uso de mi forma PROPIA
   ) {}
 
   async executeSeed() {
@@ -28,7 +26,7 @@ export class SeedService {
     await this.pokemonModel.deleteMany({});
 
     // https://pokeapi.co/api/v2/pokemon?limit=650 para cuando quiera implementar una pokedex entera pero no sobrecargar la api de pokeapi, cuidado
-    const {data} = await this.axios.get<PokeResponse>('https://pokeapi.co/api/v2/pokemon?limit=650'); 
+    const data = await this.http.get<PokeResponse>('https://pokeapi.co/api/v2/pokemon?limit=650'); 
 
     const pokemonToInsert: {name:string, no:number}[] = [];
     
