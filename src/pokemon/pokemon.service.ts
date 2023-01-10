@@ -93,7 +93,7 @@ export class PokemonService {
     }
   }
 
-  /// Funcion para llenar el seed a la bd
+  /// Funcion para llenar el seed a la bd PROPIA
   async fillPokemon(createPokemonDto: CreatePokemonDto) {
     const pokemon = await this.pokemonModel.create(createPokemonDto)
   } 

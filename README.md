@@ -21,7 +21,10 @@ docker-compose up -d
 ```
 npm i axios@0.27.2
 ```
-
+6. Reconstruir la base de datos con nuestro semilla de 650 pokemon
+```
+localhost:3000/api/seed/
+```
 
 ## Stack usado
 * MongoDB
