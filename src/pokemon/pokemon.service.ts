@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
-import { Pokemon } from './entities/pokemon.entity';
+import { ConfigService } from '@nestjs/config';
 
+import { Pokemon } from './entities/pokemon.entity';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
@@ -10,10 +11,15 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 @Injectable()
 export class PokemonService {
 
+  private readonly default_limit: number;
+
   constructor(
     @InjectModel(Pokemon.name) //con esto hace que nest permita la injeccion de modelos en este servicio
-    private readonly pokemonModel: Model<Pokemon> //La entidad
-  ) {}
+    private readonly pokemonModel: Model<Pokemon>, //La entidad
+    private readonly configService: ConfigService
+  ) {
+    this.default_limit = this.configService.get<number>('defaultLimit');
+  }
 
   async create(createPokemonDto: CreatePokemonDto) {
     try {
@@ -30,7 +36,7 @@ export class PokemonService {
 
   findAll(paginationDto: PaginationDto) {
 
-    const { limit, offset } = paginationDto; /// 10 registros por default para no llamar los 650
+    const { limit = this.default_limit, offset } = paginationDto; /// 10 registros por default(env config) para no llamar los 650
 
     return this.pokemonModel.find()
       .limit(limit) // cant
