@@ -92,4 +92,9 @@ export class PokemonService {
       }
     }
   }
+
+  /// Funcion para llenar el seed a la bd
+  async fillPokemon(createPokemonDto: CreatePokemonDto) {
+    const pokemon = await this.pokemonModel.create(createPokemonDto)
+  } 
 }
