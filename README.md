@@ -5,19 +5,32 @@
 # Ejecutar en el desarrollo
 
 1. Clonar el repositorio
+
 2. Tener nest-CLI instalado
 ```
 npm i -g @nestjs/cli
 ```
+
 3. Ejecutar
 ```
 npm i
 ```
+
 4. Levantar la imagen de la base de datos
 ```
 docker-compose up -d
 ```
-5. Reconstruir la base de datos con nuestro semilla de 650 pokemon
+
+5. Clonar el archivo ````.env.template``` y renombrar la copia a ```.env```
+
+6. Llenar las variables de entorno definidas en el ```.env```
+
+7. Ejecutar la aplicación en el dev
+```
+npm run start:dev
+```
+
+8. Reconstruir la base de datos con nuestro semilla de 650 pokemon
 ```
 localhost:3000/api/seed/
 ```
