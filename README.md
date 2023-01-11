@@ -16,12 +16,12 @@ npm i -g @nestjs/cli
 npm i
 ```
 
-4. Levantar la imagen de la base de datos
+4. Clonar el archivo ````.env.template``` y renombrar la copia a ```.env```
+
+5. Levantar la imagen de la base de datos
 ```
 docker-compose up -d
 ```
-
-5. Clonar el archivo ````.env.template``` y renombrar la copia a ```.env```
 
 6. Llenar las variables de entorno definidas en el ```.env```
 

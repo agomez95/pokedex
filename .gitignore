@@ -6,7 +6,7 @@
 /mongo
 
 #env file
-.env
+#.env
 
 # Logs
 logs
