@@ -39,8 +39,34 @@ localhost:3000/api/seed/
 * MongoDB
 * Nest
 
+## Production Build
+1. Crear el archivo ```.env.prod```
+2. Llenar las variables de entorno de prod
+3. Crear la nueva imagen 
+```
+npm run build:prod
+```
+4. Para levantarlo
+```
+npm run build:prod:re
+```
+
 ## Importante
 * Instalar la version menor de Axios funcional en Nest
 ```
 npm i axios@0.27.2
 ```
+
+## Notas
+* Render actualiza el repositorio con cada commit que se haga en el git
+* Para compilar el pokedex en render se utilizan los siguiente comandos build:
+```
+npm i && npm run build
+```
+
+* Y este es el comando que usa para iniciarlizarlo:
+```
+npm run start:prod
+```
+
+
